@@ -1,0 +1,14 @@
+# Python virtual environment
+.venv/
+
+# Python cache files
+__pycache__/
+
+# Node modules
+node_modules/
+
+# VSCode settings
+.vscode/
+
+# OS-specific files
+.DS_Store
