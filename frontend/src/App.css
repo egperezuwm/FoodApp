@@ -1,0 +1,173 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body, #root{
+    height: 100%;
+    width: 100%;
+}
+
+
+.FormContainer{
+    background-color: #7e7e7e53;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: auto;
+}
+
+.FormGroup{
+    display: flex;
+    height:fit-content;
+    width: 62.47%; /*  LMAOOOO!!!!!!!!!!! */
+    margin: auto;
+
+    /* border: 1px solid rgba(255, 0, 0, 0.335); */
+    border-radius: 3%;
+    box-shadow: 1px 4px 10px 10px rgba(0, 0, 0, 0.215);
+}
+
+.LoginPanel{
+    background-color: #ffff;
+    border-radius: 3%;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.FormPane{
+    /* border: 3px solid green; */
+    margin: 70px 100px 100px 50px;
+}
+
+.LogoArea{
+    display: flex;
+    align-items: end;
+    /* border: 1px solid rgb(186, 35, 35); */
+}
+
+.companyLogo{
+    height: 80px;
+    width: 80px;
+
+    background-position: bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url(./Components/logo.svg);
+}
+
+.LogoArea h2{
+    font-family: "Sofia sans";
+    color:#673CE8;
+    margin-left: 5px;
+    font-weight: 340;
+    font-size: 20px;
+}
+
+
+#LoginForm{
+    font-family: "Sofia sans";
+    /* border: 2px solid rgb(240, 135, 14); */
+}
+
+#LoginForm h2{
+    margin-top: 30px;
+    font-size: 28px;
+}
+
+#LoginForm p{
+    color: #7E7E7E;
+    margin: 10px 0 30px 0;
+}
+#LoginForm div:not([class="loginLinks"]){
+    position: relative;
+    width: 300px;
+    border:1px solid rgb(0, 0, 0);
+    border-radius: 5px;
+    height: 40px;
+    margin: 24px 0 0 0;
+}
+
+#LoginForm span{
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 50%;
+    padding: 0 6px;
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 7px;
+    border:2px solid rgba(37, 37, 37, 0.515);
+    transition: 0.3s ease-out all;
+}
+
+#LoginForm span:hover{
+    background-color: black;
+    color: white;
+    transform: scale(0.8);
+}
+
+#LoginForm input:not([type="checkbox"]){
+    font-size: 15px;
+    height: 100%;
+    width: 90%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 5px;
+}
+
+.loginLinks{
+    display: flex;
+    font-size: 12px;
+    margin: 10px 0;
+    justify-content: space-between;
+}
+
+
+.loginLinks label{
+    margin-left: 3px;
+}
+
+.loginLinks a{
+    color: #673CE8;
+    text-decoration: none;
+}
+
+#LoginForm button{
+    width: 100%;
+    height: 28px;
+    border-radius: 3px;
+    border: 1px solid #673CE8;
+    margin-top: 12px;
+    background: transparent;
+
+    color: #673CE8;
+    cursor: pointer;
+    transition: 0.3s all ease-out;
+}
+
+#LoginForm button:hover{
+    background-color: #673CE8;
+    color: white;
+}
+
+.sidePanel{
+    /* position: absolute;
+    top: 0;
+    right: 0; */
+    transform: scaleY(0.661) translateY(-210px) scaleX(0.85) ;
+
+}
+
+.loginSideHeader{
+    /* height: ; */
+    min-width: 50%;
+    background-image: url(./Components/imp1.svg);
+    background-repeat: no-repeat;
+    background-size: 113%;   /*  LMAOOOO!!!!!!!!!!! */
+    border-radius: 3%;
+    border-bottom-left-radius: 0px;
+    border-top-left-radius: 0px;
+}
