@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),    # everything below was added
 
     # JWT Auth endpoints
-    path('api/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # Include additional endpoints from the accounts app

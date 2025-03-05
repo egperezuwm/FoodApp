@@ -33,7 +33,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = [
-    os.environ.get("CLIENT")
+    "http://localhost:3000"
 ]
 
 REST_FRAMEWORK = {
@@ -97,11 +97,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("DB_NAME"),            # Your database name
-        'USER':  os.environ.get("DB_USER"),        # Your database user
-        'PASSWORD': os.environ.get("DB_PASS"),        # Your database password
-        'HOST': os.environ.get("DB_HOST"),             # Database host (or IP address)
-        'PORT':  os.environ.get("DB_PORT"),                      # Default PostgreSQL port
+        'NAME': 'postgres',            # Your database name
+        'USER':  'postgres',        # Your database user
+        'PASSWORD': '1234',        # Your database password
+        'HOST': 'localhost',             # Database host (or IP address)
+        'PORT':  '5432',                      # Default PostgreSQL port
     }
 }
 
