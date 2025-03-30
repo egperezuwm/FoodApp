@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import './styles/Login.css';  // this css import needs to come after react and axios imports
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/token/', { username, password });
@@ -17,7 +18,37 @@ const Login = () => {
       navigate('/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
+
       alert('Login failed! Please check your credentials.');
+    }
+  };
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    // Connect to backend using boiler-plate code:
+    if (signUpPassword !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+  
+    try {
+      const res = await axios.post('http://127.0.0.1:8000/api/signup/', {
+        username: signUpUsername,
+        email: signUpEmail,
+        password: signUpPassword
+      });
+  
+      alert("Account created successfully! You can now log in.");
+      setShowSignUp(false);
+  
+      // Clear sign-up form
+      setSignUpUsername('');
+      setSignUpEmail('');
+      setSignUpPassword('');
+      setConfirmPassword('');
+    } catch (err) {
+      console.error('Sign up failed:', err);
+      alert('Sign up failed. Please try again.');
     }
   };
 

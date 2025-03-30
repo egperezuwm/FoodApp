@@ -1,12 +1,12 @@
-// src/App.js
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState } from 'react';
 import Login from './Components/Login';
 import Dashboard from './Components/Dashboard';
 import Signup from './Components/Signup';
 import "./App.css";
 
+
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <Router>
       <Routes>
