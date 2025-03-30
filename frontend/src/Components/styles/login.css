@@ -1,0 +1,60 @@
+/* Full-page layout */
+.FormContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #e5e5e5;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+  
+  /* Card wrapper */
+  .FormGroup {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 1000px;
+    height: auto; /* ← fix here */
+    max-height: 600px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Left - Login form */
+  .LoginPanel {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  /* Right - purple graphic */
+  .loginSideHeader {
+    flex: 1;
+    background: #7c3aed;
+    background-image: url('../imp1.svg'); /* optional */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+  
+  /* Responsive stacking */
+  @media (max-width: 768px) {
+    .FormGroup {
+      flex-direction: column;
+      max-height: none;
+      height: auto;
+    }
+  
+    .loginSideHeader {
+      min-height: 200px;
+    }
+  }
