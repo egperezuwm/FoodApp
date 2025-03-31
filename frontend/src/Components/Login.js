@@ -9,6 +9,7 @@ const Login = ({ onLoginSuccess }) => {
   // NEW USER:
   const [signUpUsername, setSignUpUsername] = useState('');
   const [signUpEmail, setSignUpEmail] = useState('');
+  const [restaurantName, setRestaurantName] = useState(''); // patched in 03/30/25
   const [signUpPassword, setSignUpPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(''); 
 
@@ -38,7 +39,8 @@ const Login = ({ onLoginSuccess }) => {
       const res = await axios.post('http://127.0.0.1:8000/api/signup/', {
         username: signUpUsername,
         email: signUpEmail,
-        password: signUpPassword
+        password: signUpPassword,
+        restaurant_name: restaurantName,  // patched in 03/30/25
       });
   
       alert("Account created successfully! You can now log in.");
@@ -47,6 +49,7 @@ const Login = ({ onLoginSuccess }) => {
       // Clear sign-up form
       setSignUpUsername('');
       setSignUpEmail('');
+      setRestaurantName('');
       setSignUpPassword('');
       setConfirmPassword('');
     } catch (err) {
@@ -129,6 +132,13 @@ const Login = ({ onLoginSuccess }) => {
                 placeholder="Email"
                 value={signUpEmail}
                 onChange={(e) => setSignUpEmail(e.target.value)}
+                required
+              />
+              <input          // patched in 03/30/25
+                type="text"
+                placeholder="Restaurant Name"
+                value={restaurantName}
+                onChange={(e) => setRestaurantName(e.target.value)}
                 required
               />
               <input
