@@ -5,6 +5,7 @@ import OrderList from './OrderList';
 import MapSection from './MapSection';
 import '../dashboard.css';
 
+
 function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
 
@@ -32,7 +33,7 @@ function Dashboard() {
     <div className="dashboard-container">
       <TopNav />
       <div className="dashboard-stats">
-        <h2>Dashboard</h2>
+        <h2>{user}</h2>
         <p>Total Delivery Revenue: ${total_revenue}</p>
         <p>Pending Orders: {pending_orders}</p>
       </div>

@@ -19,5 +19,5 @@ class SignupSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         # Then create the UserProfile that has custom data, like restaurant name:
-        UserProfile.objects.create(user=user, restaurant_name=restaurant_name)
+        UserProfile.objects.create(user=user, restaurant_name=restaurant_name)  # this saves it to the db
         return user
