@@ -5,8 +5,13 @@ import './styles/Login.css';  // this css import needs to come after react and a
 const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-
+  const [showSignUp, setShowSignUp] = useState(false);
+  // NEW USER:
+  const [signUpUsername, setSignUpUsername] = useState('');
+  const [signUpEmail, setSignUpEmail] = useState('');
+  const [restaurantName, setRestaurantName] = useState(''); // patched in 03/30/25
+  const [signUpPassword, setSignUpPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -35,7 +40,8 @@ const Login = ({ onLoginSuccess }) => {
       const res = await axios.post('http://127.0.0.1:8000/api/signup/', {
         username: signUpUsername,
         email: signUpEmail,
-        password: signUpPassword
+        password: signUpPassword,
+        restaurant_name: restaurantName,  // patched in 03/30/25
       });
   
       alert("Account created successfully! You can now log in.");
@@ -44,6 +50,7 @@ const Login = ({ onLoginSuccess }) => {
       // Clear sign-up form
       setSignUpUsername('');
       setSignUpEmail('');
+      setRestaurantName('');
       setSignUpPassword('');
       setConfirmPassword('');
     } catch (err) {
@@ -108,6 +115,54 @@ const Login = ({ onLoginSuccess }) => {
         </div>
         <div className='loginSideHeader'></div>
       </div>
+
+      {/* Sign-Up Modal */}
+      {showSignUp && (
+        <div className="SignUpModalOverlay">
+          <div className="SignUpModal">
+            <button onClick={() => setShowSignUp(false)} className="CloseModal">&times;</button>
+            <h2>Create Account</h2>
+            <form onSubmit={handleSignUp}>
+                        <input
+                type="text"
+                placeholder="Username"
+                value={signUpUsername}
+                onChange={(e) => setSignUpUsername(e.target.value)}
+                required
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                value={signUpEmail}
+                onChange={(e) => setSignUpEmail(e.target.value)}
+                required
+              />
+              <input          // patched in 03/30/25
+                type="text"
+                placeholder="Restaurant Name"
+                value={restaurantName}
+                onChange={(e) => setRestaurantName(e.target.value)}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={signUpPassword}
+                onChange={(e) => setSignUpPassword(e.target.value)}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <button type="submit">Sign Up</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

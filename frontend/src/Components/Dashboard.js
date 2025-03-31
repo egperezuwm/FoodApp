@@ -33,8 +33,7 @@ function Dashboard() {
       <TopNav />
       <div className="dashboard-stats">
         <h2>Dashboard</h2>
-        <p>Welcome, {user}!</p>
-        <p>Total Revenue: ${total_revenue}</p>
+        <p>Total Delivery Revenue: ${total_revenue}</p>
         <p>Pending Orders: {pending_orders}</p>
       </div>
 
