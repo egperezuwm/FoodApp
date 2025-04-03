@@ -11,7 +11,7 @@ const Login = ({ onLoginSuccess }) => {
   const [signUpEmail, setSignUpEmail] = useState('');
   const [restaurantName, setRestaurantName] = useState(''); // patched in 03/30/25
   const [signUpPassword, setSignUpPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState(''); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
