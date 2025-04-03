@@ -20,7 +20,8 @@ const Login = ({ onLoginSuccess }) => {
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
-      navigate('/dashboard');
+      
+      onLoginSuccess({ username })
     } catch (error) {
       console.error('Login failed:', error);
 
@@ -68,7 +69,7 @@ const Login = ({ onLoginSuccess }) => {
               <div className='companyLogo'></div>
               <h2>FoodDeliveryApp</h2>
             </div>
-            <form onSubmit={handleSubmit} id="LoginForm">
+            <form onSubmit={handleLogin} id="LoginForm">
               <h2>Log into your account</h2>
               <p>Hey! It's nice to have you back.</p>
               <div>
@@ -105,7 +106,7 @@ const Login = ({ onLoginSuccess }) => {
               {/* ✅ Create Account Button */}
               <button 
                 type="button" 
-                onClick={() => navigate('/signup')} 
+                onClick={() => setShowSignUp(true)}
                 style={{ marginTop: '10px', background: 'none', border: 'none', color: 'blue', cursor: 'pointer' }}
               >
                 Create an Account
