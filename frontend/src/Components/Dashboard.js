@@ -33,7 +33,7 @@ function Dashboard() {
     <div className="dashboard-container">
       <TopNav />
       <div className="dashboard-stats">
-        <h2>{user}</h2>
+        <h2>Dashboard</h2>
         <p>Pending Orders: {pending_orders}</p>
       </div>
 
