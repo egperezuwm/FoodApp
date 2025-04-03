@@ -27,14 +27,13 @@ function Dashboard() {
   if (!dashboardData) return <div>Loading...</div>;
 
   // Extracting data
-  const { user, total_revenue, pending_orders, orders, drivers, customers } = dashboardData;
+  const { user, pending_orders, orders, drivers, customers } = dashboardData;
 
   return (
     <div className="dashboard-container">
       <TopNav />
       <div className="dashboard-stats">
         <h2>{user}</h2>
-        <p>Total Delivery Revenue: ${total_revenue}</p>
         <p>Pending Orders: {pending_orders}</p>
       </div>
 
