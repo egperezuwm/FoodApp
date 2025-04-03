@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import UserProfile, Order
 
 class SignupSerializer(serializers.ModelSerializer):
     restaurant_name = serializers.CharField(write_only=True)
@@ -21,3 +21,8 @@ class SignupSerializer(serializers.ModelSerializer):
         # Then create the UserProfile that has custom data, like restaurant name:
         UserProfile.objects.create(user=user, restaurant_name=restaurant_name)  # this saves it to the db
         return user
+    
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['id', 'platform', 'customer_name', 'item_count', 'total_cost', 'eta', 'status', 'created_at']
