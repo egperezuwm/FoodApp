@@ -1,14 +1,14 @@
 import React from 'react';
 
 function OrderCard({ order }) {
-  const { customerName, itemCount, total_cost, eta, platform } = order;
+  const { customer_name, item_count, total_cost, eta, platform } = order;
 
   return (
     <div className="order-card">
-      <h3>{platform} for {customerName}</h3>
-      <p>{itemCount} items - ${total_cost.toFixed(2)}</p>
+      <h3>{platform} for {customer_name}</h3>
+      <p>{item_count} items - ${Number(total_cost || 0).toFixed(2)}</p>
       <p style={{ fontWeight: 'bold', color: eta === 'Arriving' ? 'red' : 'black' }}>
-        ETA: {eta}
+        ETA: {eta} MINUTES
       </p>
     </div>
   );
