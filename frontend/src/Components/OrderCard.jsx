@@ -3,11 +3,20 @@ import React from 'react';
 function OrderCard({ order, onDismiss }) {
   const { id, customer_name, item_count, total_cost, eta, platform, status, completed_at } = order;
 
-  const handleDoubleClick = () => {
+  const handleDoubleClick = async () => {
+    await fetch(`http://127.0.0.1:8000/api/orders/${id}/`, {
+      method: 'PATCH',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}` 
+      },
+      body: JSON.stringify({ status: 'complete' }),
+    });
     if (typeof onDismiss === 'function') {
       onDismiss(id);
     }
   };
+  
 
   return (
     <div className="order-card" onDoubleClick={handleDoubleClick}>

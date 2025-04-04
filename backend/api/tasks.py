@@ -10,6 +10,6 @@ def update_order_etas():
             order.eta -= 1
             order.save()
         elif order.eta == 0:
-            order.status = "complete"
-            order.completed_at = now
+            #order.status = "complete"
+            #order.completed_at = now  // must double-click to mark as complete (frontend)
             order.save()

@@ -8,13 +8,14 @@ class UserProfile(models.Model):
 
 class Order(models.Model):
     PLATFORM_CHOICES = [('DoorDash', 'DoorDash'), ('UberEats', 'UberEats')]
+    STATUS_CHOICES = [('pending', 'pending'), ('complete', 'complete')]
 
     platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
     customer_name = models.CharField(max_length=50)
     item_count = models.PositiveIntegerField()
     total_cost = models.DecimalField(max_digits=8, decimal_places=2)    # dummy data
     eta = models.PositiveIntegerField()
-    status = models.CharField(max_length=50, default="Pending")
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
 
