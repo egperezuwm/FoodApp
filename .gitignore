@@ -20,3 +20,6 @@ dotTheOG
 
 #Database migrations
 backend/api/migrations/
+
+#dependencies
+package-lock.json
