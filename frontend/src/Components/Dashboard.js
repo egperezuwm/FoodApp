@@ -22,6 +22,8 @@ function Dashboard() {
     };
 
     fetchDashboardData();
+    const interval = setInterval(fetchDashboardData, 5000); // repeat every 5s
+    return () => clearInterval(interval); // cleanup on unmount
   }, []);
 
   if (!dashboardData) return <div>Loading...</div>;
