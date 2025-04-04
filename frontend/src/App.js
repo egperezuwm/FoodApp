@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Login from './Components/Login';
 import Dashboard from './Components/Dashboard';
 import './App.css';
@@ -15,13 +15,15 @@ function App() {
   };
 
   return (
-    <div className="AppContainer">
-      {isLoggedIn ? (
-        <Dashboard user={userInfo} />
-      ) : (
-        <Login onLoginSuccess={handleLoginSuccess} />
-      )}
-    </div>
+    <Router> {/* Wrap everything in Router */}
+      <div className="AppContainer">
+        {isLoggedIn ? (
+          <Dashboard user={userInfo} />
+        ) : (
+          <Login onLoginSuccess={handleLoginSuccess} />
+        )}
+      </div>
+    </Router>
   );
 }
 

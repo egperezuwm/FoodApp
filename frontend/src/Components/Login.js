@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import './styles/Login.css';  // this css import needs to come after react and axios imports
 
-const Login = () => {
-  const navigate = useNavigate();
+const Login = ({ onLoginSuccess }) => {
+  //const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showSignUp, setShowSignUp] = useState(false);
