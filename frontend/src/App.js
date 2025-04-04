@@ -14,11 +14,17 @@ function App() {
     setIsLoggedIn(true);
   };
 
+  const handleLogout = () => {
+    setUserInfo(null);
+    setIsLoggedIn(false);
+    localStorage.removeItem("access_token"); // optional, if you're using token auth
+  };
+
   return (
     <Router> {/* Wrap everything in Router */}
       <div className="AppContainer">
         {isLoggedIn ? (
-          <Dashboard user={userInfo} />
+          <Dashboard user={userInfo} onLogout={handleLogout} />
         ) : (
           <Login onLoginSuccess={handleLoginSuccess} />
         )}

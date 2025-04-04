@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import '../dashboard.css';
 
 
-function Dashboard() {
+function Dashboard({onLogout}) {
   const [dashboardData, setDashboardData] = useState(null);
   //const navigate = useNavigate();
   const [dismissedOrders, setDismissedOrders] = useState([]);
@@ -36,6 +36,7 @@ function Dashboard() {
 
   const handleLogout = () => {
     // Navigate to login page
+    onLogout();
     navigate('/');
   };
   
