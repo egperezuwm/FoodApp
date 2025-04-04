@@ -27,8 +27,8 @@ class dashboard(APIView):
         except Exception as e:
             return Response({"error": "UserProfile not found for this user."}, status=400)
         
-        pending_orders = Order.objects.filter(status="Pending").count()
-        orders = Order.objects.all().order_by('-created_at')
+        pending_orders = Order.objects.filter(status="pending").count()
+        orders = Order.objects.filter(status="pending").order_by('eta')
         orders_serialized = OrderSerializer(orders, many=True).data
 
         return Response({

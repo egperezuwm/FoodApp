@@ -16,6 +16,7 @@ class Order(models.Model):
     eta = models.PositiveIntegerField()
     status = models.CharField(max_length=50, default="Pending")
     created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.platform.title()} for {self.customer_name}"
