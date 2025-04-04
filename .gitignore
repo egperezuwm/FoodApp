@@ -19,4 +19,4 @@ node_modules/
 dotTheOG
 
 #Database migrations
-migrations/
+backend/api/migrations/
