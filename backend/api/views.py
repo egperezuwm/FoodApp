@@ -7,6 +7,8 @@ from rest_framework import status
 from .serializers import SignupSerializer, OrderSerializer
 from rest_framework.permissions import IsAuthenticated
 from .models import UserProfile, Order
+from django.utils.timezone import now
+
 
 
 class Signup(APIView):
@@ -43,3 +45,13 @@ class dashboard(APIView):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+    def perform_update(self, serializer):
+        status = serializer.validated_data.get('status')
+        instance = self.get_object()
+        if status == 'complete' and not instance.completed_at:
+            # Should be the first time this order is being completed
+            serializer.save(completed_at=now())
+        else:
+            # Keep existing completed_at as-is
+            serializer.save()
