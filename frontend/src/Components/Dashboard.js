@@ -8,6 +8,7 @@ import '../dashboard.css';
 
 function Dashboard() {
   const [dashboardData, setDashboardData] = useState(null);
+  const [dismissedOrders, setDismissedOrders] = useState([]);
 
   useEffect(() => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("access_token")}`;
@@ -30,7 +31,15 @@ function Dashboard() {
 
   // Extracting data
   const { user, pending_orders, orders, drivers, customers } = dashboardData;
-
+  
+  const handleDismissOrder = (id) => {
+    const dismissedOrder = orders.find(order => order.id === id);
+    if (dismissedOrder) {
+      setDismissedOrders(prev => [...prev, dismissedOrder]);
+    }
+  };
+  const visibleOrders = orders.filter(order => !dismissedOrders.some(d => d.id === order.id));
+  
   return (
     <div className="dashboard-container">
       <TopNav />
@@ -41,7 +50,7 @@ function Dashboard() {
 
       <div className="dashboard-main">
         {/* Order List */}
-        <OrderList orders={orders} />
+        <OrderList orders={visibleOrders} onDismiss={handleDismissOrder} />
 
         {/* Map */}
         <MapSection drivers={drivers} customers={customers} />

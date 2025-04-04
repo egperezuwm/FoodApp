@@ -11,4 +11,4 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ['platform', 'customer_name', 'item_count', 'total_cost', 'eta', 'status']
     list_filter = ['platform', 'status']
     search_fields = ['customer_name']
-    ordering = ['-created_at']  # the minus sign '-' puts the dates in descending order
+    ordering = ['-completed_at']  # the minus sign '-' puts the dates in descending order

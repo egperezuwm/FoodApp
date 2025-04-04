@@ -2,6 +2,7 @@ from .models import Order
 from django.utils import timezone
 
 def update_order_etas():
+    now = timezone.now()
     pending_orders = Order.objects.filter(status="pending")
 
     for order in pending_orders:
@@ -10,4 +11,5 @@ def update_order_etas():
             order.save()
         elif order.eta == 0:
             order.status = "complete"
+            order.completed_at = now
             order.save()
