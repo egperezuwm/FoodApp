@@ -23,3 +23,6 @@ backend/api/migrations/
 
 #dependencies
 package-lock.json
+
+# Database files
+backend/db.sqlite3
