@@ -22,7 +22,6 @@ const Login = () => {
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
-      
       // Try to get the user profile to get restaurant name
       try {
         const userProfileRes = await axios.get('http://127.0.0.1:8000/api/user-profile/', {
@@ -35,7 +34,8 @@ const Login = () => {
         console.error('Error fetching user profile:', profileErr);
       }
       
-      navigate('/dashboard');
+      //navigate('/dashboard');
+      onLoginSuccess({ username })
     } catch (error) {
       console.error('Login failed:', error);
       alert('Login failed! Please check your credentials.');
@@ -82,7 +82,7 @@ const Login = () => {
               <div className='companyLogo'></div>
               <h2>FoodDeliveryApp</h2>
             </div>
-            <form onSubmit={handleSubmit} id="LoginForm">
+            <form onSubmit={handleLogin} id="LoginForm">
               <h2>Log into your account</h2>
               <p>Hey! It's nice to have you back.</p>
               <div>
@@ -119,7 +119,7 @@ const Login = () => {
               {/* ✅ Create Account Button */}
               <button 
                 type="button" 
-                onClick={() => navigate('/signup')} 
+                onClick={() => setShowSignUp(true)}
                 style={{ marginTop: '10px', background: 'none', border: 'none', color: 'blue', cursor: 'pointer' }}
               >
                 Create an Account

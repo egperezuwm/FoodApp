@@ -2,20 +2,26 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './Components/Login';
 import Dashboard from './Components/Dashboard';
-import Signup from './Components/Signup';
-import "./App.css";
-
+import './App.css';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState(null); // Store username or userID
+
+  // handle logins for unique users:
+  const handleLoginSuccess = (user) => {
+    setUserInfo(user);
+    setIsLoggedIn(true);
+  };
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-    </Router>
+    <div className="AppContainer">
+      {isLoggedIn ? (
+        <Dashboard user={userInfo} />
+      ) : (
+        <Login onLoginSuccess={handleLoginSuccess} />
+      )}
+    </div>
   );
 }
 
