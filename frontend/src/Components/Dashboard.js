@@ -3,7 +3,7 @@ import axios from 'axios';
 import TopNav from './TopNav';
 import OrderList from './OrderList';
 import MapSection from './MapSection';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import '../dashboard.css';
 
 
@@ -37,7 +37,7 @@ function Dashboard({onLogout}) {
   const handleLogout = () => {
     // Navigate to login page
     onLogout();
-    navigate('/');
+    //navigate('/');
   };
   
   const handleDismissOrder = (id) => {
