@@ -17,3 +17,6 @@ node_modules/
 
 #Israel's virtual environment 
 dotTheOG
+
+#Database migrations
+migrations/
