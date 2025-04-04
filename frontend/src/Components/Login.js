@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './styles/Login.css';  // this css import needs to come after react and axios imports
 
-const Login = ({ onLoginSuccess }) => {
+const Login = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showSignUp, setShowSignUp] = useState(false);
@@ -20,11 +22,22 @@ const Login = ({ onLoginSuccess }) => {
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
+      // Try to get the user profile to get restaurant name
+      try {
+        const userProfileRes = await axios.get('http://127.0.0.1:8000/api/user-profile/', {
+          headers: { Authorization: `Bearer ${response.data.access}` }
+        });
+        if (userProfileRes.data && userProfileRes.data.restaurant_name) {
+          localStorage.setItem('restaurant_name', userProfileRes.data.restaurant_name);
+        }
+      } catch (profileErr) {
+        console.error('Error fetching user profile:', profileErr);
+      }
       
+      //navigate('/dashboard');
       onLoginSuccess({ username })
     } catch (error) {
       console.error('Login failed:', error);
-
       alert('Login failed! Please check your credentials.');
     }
   };
