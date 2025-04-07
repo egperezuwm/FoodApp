@@ -8,7 +8,6 @@ from .serializers import SignupSerializer, OrderSerializer, RestaurantSerializer
 from rest_framework.permissions import IsAuthenticated
 from .models import UserProfile, Order, Restaurant
 
-
 class Signup(APIView):
     permission_classes = [AllowAny]
 
@@ -17,6 +16,7 @@ class Signup(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
+        print("Signup Error:", serializer.errors) # added when Restaurant Model was instituted
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class dashboard(APIView):

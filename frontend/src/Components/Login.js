@@ -51,6 +51,9 @@ const Login = ({ onLoginSuccess }) => {
     }
   
     try {
+      // NEEDED THIS TO SIGN UP (took 2 hours to find out!!!)
+      delete axios.defaults.headers.common['Authorization'];
+
       const res = await axios.post('http://127.0.0.1:8000/api/signup/', {
         username: signUpUsername,
         email: signUpEmail,

@@ -4,9 +4,9 @@ from django.db import models
 # Create your models here.
 class Restaurant(models.Model):
     name = models.CharField(max_length=100)
-    address = models.TextField()
-    location_lat = models.FloatField()
-    location_lng = models.FloatField()
+    address = models.TextField(blank=True)
+    location_lat = models.FloatField(default=42.9744)
+    location_lng = models.FloatField(default=87.938)
 
     def __str__(self):
         return self.name
