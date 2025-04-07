@@ -4,9 +4,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
 from rest_framework import status
-from .serializers import SignupSerializer, OrderSerializer
+from .serializers import SignupSerializer, OrderSerializer, RestaurantSerializer
 from rest_framework.permissions import IsAuthenticated
-from .models import UserProfile, Order
+from .models import UserProfile, Order, Restaurant
 
 
 class Signup(APIView):
@@ -24,16 +24,18 @@ class dashboard(APIView):
 
     def get(self, request):
         try:
-            user = request.user.userprofile.restaurant_name
+            restaurant = request.user.userprofile.restaurant
+            restaurant_data = RestaurantSerializer(restaurant).data
         except Exception as e:
-            return Response({"error": "UserProfile not found for this user."}, status=400)
+            print("DASHBOARD ERROR:", e)
+            return Response({"error": str(e)}, status=400)
         
         pending_orders = Order.objects.filter(status="pending").count()
-        orders = Order.objects.filter(status="pending").order_by('eta')
+        orders = Order.objects.filter(status="pending").order_by('eta') # filter this for each individual user
         orders_serialized = OrderSerializer(orders, many=True).data
 
         return Response({
-            "user": user,
+            "restaurant": restaurant_data,
             "pending_orders": pending_orders,
             "orders": orders_serialized,
             "drivers": [],
@@ -43,3 +45,19 @@ class dashboard(APIView):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+class UpdateRestaurant(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request):
+        try:
+            user_profile = request.user.userprofile
+            restaurant = user_profile.restaurant
+        except Exception as e:
+            return Response({"error": "Restaurant not found for this user"}, status=400)
+
+        serializer = RestaurantSerializer(restaurant, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)

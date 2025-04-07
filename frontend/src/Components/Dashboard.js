@@ -52,7 +52,7 @@ function Dashboard({onLogout}) {
     <div className="dashboard-container">
       <TopNav onLogout={handleLogout} />
       <div className="dashboard-stats">
-        <h2>{user}'s Dashboard</h2>
+        <h2>{user} Dashboard</h2>
         <p>Pending Orders: {pending_orders}</p>
       </div>
 
