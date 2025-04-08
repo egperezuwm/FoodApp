@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import UserProfile, Order
+from .models import UserProfile, Order, Restaurant
 
 class SignupSerializer(serializers.ModelSerializer):
     restaurant_name = serializers.CharField(write_only=True)
@@ -19,9 +19,18 @@ class SignupSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         # Then create the UserProfile that has custom data, like restaurant name:
-        UserProfile.objects.create(user=user, restaurant_name=restaurant_name)  # this saves it to the db
+        # Lookup or create the Restaurant object
+        restaurant, _ = Restaurant.objects.get_or_create(name=restaurant_name)
+        
+        # Save UserProfile with actual Restaurant ForeignKey
+        UserProfile.objects.create(user=user, restaurant=restaurant)
         return user
     
+class RestaurantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Restaurant
+        fields = ['name', 'address', 'location_lat', 'location_lng']
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order

@@ -4,7 +4,7 @@ import TopNav from './TopNav';
 import OrderList from './OrderList';
 import MapSection from './MapSection';
 //import { useNavigate } from 'react-router-dom';
-import '../dashboard.css';
+import './styles/dashboard.css';
 
 
 function Dashboard({onLogout}) {
@@ -52,7 +52,7 @@ function Dashboard({onLogout}) {
     <div className="dashboard-container">
       <TopNav onLogout={handleLogout} />
       <div className="dashboard-stats">
-        <h2>Dashboard</h2>
+        <h2>{user} Dashboard</h2>
         <p>Pending Orders: {pending_orders}</p>
       </div>
 
