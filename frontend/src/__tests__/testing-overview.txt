@@ -1,0 +1,49 @@
+# Frontend Testing Overview – FoodDeliveryApp
+
+## ✅ Implemented Tests
+
+### `Login.test.js`
+**Purpose:**  
+Validates that the login screen renders essential form elements.
+
+**Checks:**
+- Username input field is present.
+- Password input field is present.
+- Login button is present.
+
+### `Dashboard.test.js`
+**Purpose:**  
+Ensures the dashboard loads with mock data and displays the correct user interface elements when no orders are active.
+
+**Checks:**
+- Renders the dashboard heading (e.g., "Kevin Dashboard").
+- Displays pending order count (`Pending Orders: 0`).
+- Shows the "Current Orders" section with "No active orders".
+- Confirms that the map (Leaflet container) renders properly.
+
+-------------------------------------------------------------------------------------------------------------------------
+
+## 🕳️ To Do / Future Test Ideas
+
+**Notes:**
+- `TopNav` buttons (Generate Order, DoorDash, Logout) are not tested in this suite.
+- Map rendering is confirmed via existence of `.leaflet-container`, not visual accuracy.
+
+### 🔄 Dashboard
+- ✅ Test with **active orders**:
+  - Order card renders customer info, item count, price, and ETA.
+  - Conditional rendering of "No active orders" disappears.
+- 🚫 Test **order dismissing** (via "Dismiss" button if available).
+- 🚫 Handle and test **API errors** (e.g., simulate axios failure).
+- 🚫 Test **loading state** before data fetch completes.
+
+### 🎯 TopNav
+- 🚫 Test button rendering and click functionality.
+- 🚫 Validate logout flow (`onLogout` handler is triggered).
+- 🚫 Routing behavior on button clicks.
+
+### 🧪 General
+- 🚫 Snapshot testing of layout (optional).
+- 🚫 Accessibility checks (via `axe` or similar).
+
+---
