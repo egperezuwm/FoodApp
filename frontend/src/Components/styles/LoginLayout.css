@@ -11,29 +11,46 @@
   box-sizing: border-box;
 }
 
-/* White card wrapper */
-.FormGroup {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
 /* Panel holding logo, header, and form */
 .LoginPanel {
   width: 100%;
   max-width: 400px;
-  margin: 0 auto;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  
-  
+}
+
+.LoginLayout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 900px;
+  margin: auto;
+
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.LoginShowcase {
+  flex: 1;
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.LoginShowcase h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.LoginShowcase p {
+  font-size: 1.1rem;
 }
 
 /*
@@ -44,4 +61,4 @@
 #LoginForm button {
   border: 1px dashed red;
 }
-*/
+  */

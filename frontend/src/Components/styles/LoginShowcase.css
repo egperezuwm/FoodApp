@@ -1,0 +1,34 @@
+.LoginShowcase {
+    flex: 1;
+    background-color: #f9f9f9;
+    border-radius: 20px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: "Sofia sans";
+  }
+
+  .LoginShowcase h3 {
+    font-size: 1.8rem;
+  }
+
+  .LoginShowcase p {
+    font-size: 1.7rem;
+  }
+  
+  .PlatformLogos {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .PlatformLogos img {
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+  }
+  
