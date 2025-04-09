@@ -4,7 +4,7 @@ import TopNav from './TopNav';
 import OrderList from './OrderList';
 import MapSection from './MapSection';
 //import { useNavigate } from 'react-router-dom';
-import './styles/dashboard.css';
+import './styles/Dashboard.css';
 
 
 function Dashboard({onLogout}) {

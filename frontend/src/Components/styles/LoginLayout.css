@@ -1,0 +1,47 @@
+
+
+/* Login layout wrapper */
+.FormContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #e5e5e5;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* White card wrapper */
+.FormGroup {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Panel holding logo, header, and form */
+.LoginPanel {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  
+}
+
+/*
+.LoginPanel,
+#LoginForm,
+#LoginForm div,
+#LoginForm input,
+#LoginForm button {
+  border: 1px dashed red;
+}
+*/
