@@ -128,7 +128,6 @@ const Login = ({ onLoginSuccess }) => {
             </form>
           </section>
         </div>
-        <div className='loginSideHeader'></div>
       </div>
 
       {/* Sign-Up Modal */}

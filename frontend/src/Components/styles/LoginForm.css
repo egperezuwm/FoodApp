@@ -1,70 +1,78 @@
-#LoginForm{
-    font-family: "Sofia sans";
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
+
+#LoginForm {
+  font-family: "Sofia sans";
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#LoginForm h2{
-    margin-top: 30px;
-    font-size: 28px;
+#LoginForm h2 {
+  margin-top: 30px;
+  font-size: 28px;
 }
 
-#LoginForm p{
-    color: #7E7E7E;
-    margin: 10px 0 30px 0;
+#LoginForm p {
+  color: #7E7E7E;
+  margin: 10px 0 30px 0;
+  text-align: center;
 }
 
-#LoginForm div:not([class="loginLinks"]){
-    position: relative;
-    width: 100%;
-    border:1px solid rgb(0, 0, 0);
-    border-radius: 5px;
-    height: 40px;
-    margin: 24px 0 0 0;
+#LoginForm div {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 5px;
+  height: 40px;
+  margin: 24px 0 0 0;
 }
 
-#LoginForm span{
-    border:2px solid rgba(37, 37, 37, 0.515);
-    border-radius: 50%;
-    padding: 0 6px;
-    cursor: pointer;
-    position: absolute;
-    right: 5px;
-    top: 7px;
-    transition: 0.3s ease-out all;
+#LoginForm span {
+  border: 2px solid rgba(37, 37, 37, 0.515);
+  border-radius: 50%;
+  padding: 0 6px;
+  cursor: pointer;
+  position: absolute;
+  right: 5px;
+  top: 7px;
+  transition: 0.3s ease-out all;
 }
 
-#LoginForm span:hover{
-    background-color: black;
-    color: white;
-    transform: scale(0.8);
+#LoginForm span:hover {
+  background-color: black;
+  color: white;
+  transform: scale(0.8);
 }
 
-#LoginForm input:not([type="checkbox"]){
-    font-size: 15px;
-    height: 100%;
-    width: 90%;
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 5px;
+#LoginForm input {
+  font-size: 15px;
+  height: 100%;
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 5px;
 }
 
-#LoginForm button{
-    width: 100%;
-    height: 28px;
-    border-radius: 3px;
-    border: 1px solid #673CE8;
-    margin-top: 12px;
-    background: transparent;
-
-    color: #673CE8;
-    cursor: pointer;
-    transition: 0.3s all ease-out;
+#LoginForm button {
+  width: 100%;
+  max-width: 100%;
+  height: 40px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 3px;
+  border: 1px solid #673CE8;
+  margin-top: 12px;
+  background: transparent;
+  color: #673CE8;
+  cursor: pointer;
+  transition: 0.3s all ease-out;
 }
 
-#LoginForm button:hover{
-    background-color: #673CE8;
-    color: white;
+#LoginForm button:hover {
+  background-color: #673CE8;
+  color: white;
 }
