@@ -106,3 +106,30 @@
   height: 100%;
   width: 100%;
 }
+
+/* Add hover pop effect */
+.order-card:hover {
+  transform: scale(1.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.floating-success-msg {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  animation: fadeOut 2s ease-in-out forwards;
+  z-index: 9999;
+}
+
+@keyframes fadeOut {
+  0%   { opacity: 1; transform: translateY(0); }
+  90%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
