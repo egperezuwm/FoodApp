@@ -19,11 +19,13 @@ function TopNav({ onLogout }) {
     return (
       <nav className="top-nav">
         <ul>
-          <li>Orders</li>       {/*press this to show most recent completed orders.*/}
-          <li>All Orders</li>   {/*press this to do a search of order history by day or service.*/}
-          <li>Analytics</li>    {/*press this to see all data within a time period.*/}
-          <li>MyProfile</li>    {/* admin only, press this to access admin functions.*/}
-          <li className="logout-btn" onClick={handleLogout}>Logout</li>
+          {/*<li>Orders</li>       {/*press this to show most recent completed orders.*/}
+          {/*<li>All Orders</li>   {/*press this to do a search of order history by day or service.*/}
+          {/*<li>Analytics</li>    {/*press this to see all data within a time period.*/}
+          {/*<li>MyProfile</li>    {/* admin only, press this to access admin functions.*/}
+          <li><button className="nav-btn">Generate Order</button></li>
+          <li><button className="nav-btn">DoorDash</button></li>
+          <li style={{marginLeft: 'auto'}}><button className="nav-btn" onClick={handleLogout}>Logout</button></li>
         </ul>
       </nav>
     );

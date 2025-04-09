@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 //import { useNavigate } from 'react-router-dom';
-import './styles/Login.css';  // this css import needs to come after react and axios imports
+import './styles/LoginLayout.css';
+import './styles/LoginForm.css';
+import './styles/Logo.css';
+import './styles/SignUp.css';
+
 
 const Login = ({ onLoginSuccess }) => {
   //const navigate = useNavigate();
@@ -51,6 +55,9 @@ const Login = ({ onLoginSuccess }) => {
     }
   
     try {
+      // NEEDED THIS TO SIGN UP (took 2 hours to find out!!!)
+      delete axios.defaults.headers.common['Authorization'];
+
       const res = await axios.post('http://127.0.0.1:8000/api/signup/', {
         username: signUpUsername,
         email: signUpEmail,
@@ -80,11 +87,12 @@ const Login = ({ onLoginSuccess }) => {
           <section className="FormPane">
             <div className="LogoArea">
               <div className='companyLogo'></div>
-              <h2>FoodDeliveryApp</h2>
+              <h2>SyncServe</h2> 
+              {/* Up for change */}
             </div>
             <form onSubmit={handleLogin} id="LoginForm">
-              <h2>Log into your account</h2>
-              <p>Hey! It's nice to have you back.</p>
+              <h2>Welcome Back!</h2>
+              {/* <p>Hey! It's nice to have you back.</p> (removing for now)*/}
               <div>
                 <input 
                   className="usernameInput"
@@ -107,13 +115,6 @@ const Login = ({ onLoginSuccess }) => {
                 />
                 <span onClick={() => setPassword('')}>&#120;</span>
               </div>
-              <div className='loginLinks'>
-                <section>
-                  <input type="checkbox" name="remember_me" id="remember_me" />
-                  <label htmlFor="remember_me">Remember me</label>
-                </section>
-                <a href="https://google.com">Forgot Password</a>
-              </div>
               <button type="submit">Login</button>
 
               {/* ✅ Create Account Button */}
@@ -127,7 +128,6 @@ const Login = ({ onLoginSuccess }) => {
             </form>
           </section>
         </div>
-        <div className='loginSideHeader'></div>
       </div>
 
       {/* Sign-Up Modal */}
