@@ -46,6 +46,22 @@
   margin: 1rem;
 }
 
+.toggle-orders-btn {
+  background-color: #6a0dad;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-orders-btn:hover {
+  background-color: #8c1dff;
+}
+
 .dashboard-main {
   display: flex;
   flex-direction: row;

@@ -30,13 +30,17 @@ class dashboard(APIView):
             print("DASHBOARD ERROR:", e)
             return Response({"error": str(e)}, status=400)
         
+        status_filter = request.query_params.get('status', 'pending')
+        
         pending_orders = Order.objects.filter(status="pending").count()
-        orders = Order.objects.filter(status="pending").order_by('eta') # filter this for each individual user
+        completed_orders = Order.objects.filter(status="complete").count()
+        orders = Order.objects.filter(status=status_filter).order_by('-created_at' if status_filter == 'complete' else 'eta')
         orders_serialized = OrderSerializer(orders, many=True).data
 
         return Response({
             "restaurant": restaurant_data,
             "pending_orders": pending_orders,
+            "completed_orders": completed_orders,
             "orders": orders_serialized,
             "drivers": [],
             "customers": [],
