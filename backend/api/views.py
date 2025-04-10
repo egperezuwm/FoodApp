@@ -7,6 +7,8 @@ from rest_framework import status
 from .serializers import SignupSerializer, OrderSerializer, RestaurantSerializer
 from rest_framework.permissions import IsAuthenticated
 from .models import UserProfile, Order, Restaurant
+import random # for generating orders
+from django.utils import timezone # for generating orders
 
 class Signup(APIView):
     permission_classes = [AllowAny]
@@ -65,3 +67,36 @@ class UpdateRestaurant(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
+    
+class GenerateOrder(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            user_profile = request.user.userprofile
+            restaurant = user_profile.restaurant
+
+            platform = random.choice(['DoorDash', 'UberEats', 'GrubHub'])
+            customer_name = random.choice(['Tom Landry', 'Jane Customer'])
+            item_count = random.randint(1, 10)
+            total_cost = round(random.uniform(10, 100), 2)
+            eta = random.randint(7, 31)
+
+            order = Order.objects.create(
+                platform=platform,
+                customer_name=customer_name,
+                restaurant=restaurant,
+                item_count=item_count,
+                total_cost=total_cost,
+                eta=eta,
+                driver_lat=restaurant.location_lat,
+                driver_lng=restaurant.location_lng,
+                status='pending',
+                created_at=timezone.now()
+            )
+            print("✅ Order created:", order)
+            return Response({'message': 'Order created', 'order_id': order.id}, status=201)
+
+        except Exception as e:
+            print("❌ Order creation failed:", str(e))  # 🧨 This will show the REAL reason
+            return Response({'error': str(e)}, status=500)
