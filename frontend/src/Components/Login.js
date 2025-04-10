@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-//import { useNavigate } from 'react-router-dom';
 import './styles/LoginLayout.css';
 import './styles/LoginForm.css';
 import './styles/Logo.css';
 import './styles/SignUp.css';
+import LoginShowcase from './LoginShowcase';
+
 
 
 const Login = ({ onLoginSuccess }) => {
-  //const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showSignUp, setShowSignUp] = useState(false);
@@ -82,7 +82,7 @@ const Login = ({ onLoginSuccess }) => {
 
   return (
     <div className="FormContainer">
-      <div className="FormGroup">
+      <div className="LoginLayout">
         <div className="LoginPanel">
           <section className="FormPane">
             <div className="LogoArea">
@@ -128,6 +128,7 @@ const Login = ({ onLoginSuccess }) => {
             </form>
           </section>
         </div>
+        <LoginShowcase />
       </div>
 
       {/* Sign-Up Modal */}

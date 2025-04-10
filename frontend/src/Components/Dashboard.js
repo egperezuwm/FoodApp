@@ -3,15 +3,14 @@ import axios from 'axios';
 import TopNav from './TopNav';
 import OrderList from './OrderList';
 import MapSection from './MapSection';
-//import { useNavigate } from 'react-router-dom';
 import './styles/Dashboard.css';
 
 
 function Dashboard({onLogout}) {
   const [dashboardData, setDashboardData] = useState(null);
-  //const navigate = useNavigate();
   const [dismissedOrders, setDismissedOrders] = useState([]);
   const [showCompleted, setShowCompleted] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("access_token")}`;
@@ -39,13 +38,15 @@ function Dashboard({onLogout}) {
   const handleLogout = () => {
     // Navigate to login page
     onLogout();
-    //navigate('/');
   };
   
   const handleDismissOrder = (id) => {
     const dismissedOrder = orders.find(order => order.id === id);
     if (dismissedOrder) {
       setDismissedOrders(prev => [...prev, dismissedOrder]);
+
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 2000);
     }
   };
   const visibleOrders = orders.filter(order => !dismissedOrders.some(d => d.id === order.id));
@@ -63,6 +64,8 @@ function Dashboard({onLogout}) {
           {showCompleted ? "View Current Orders" : "View Completed Orders"}
         </button>
       </div>
+
+      {showSuccessMessage && (<div className="floating-success-msg">Order Completed ✔️</div>)}
 
       <div className="dashboard-main">
         {/* Order List */}
