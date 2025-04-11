@@ -19,7 +19,7 @@ class UserProfile(models.Model):
         return self.user.username
 
 class Order(models.Model):
-    PLATFORM_CHOICES = [('DoorDash', 'DoorDash'), ('UberEats', 'UberEats')]
+    PLATFORM_CHOICES = [('DoorDash', 'DoorDash'), ('UberEats', 'UberEats'), ('GrubHub', 'GrubHub')]
     STATUS_CHOICES = [('pending', 'pending'), ('complete', 'complete')]
 
     platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
