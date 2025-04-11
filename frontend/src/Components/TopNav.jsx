@@ -16,24 +16,14 @@ function TopNav({ onLogout }) {
       }
     };
 
-    const handleGenerateOrder = async () => {
-      console.log("clicked");
-      const token = localStorage.getItem('access_token');
-      console.log("Access Token:", token);  // 👈 See what you're sending
-      try {
-        const response = await fetch('http://localhost:8000/api/generate-order/', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-            'Content-Type': 'application/json',
-          },
-        });
-    
-        const data = await response.json();
-        console.log("✅ Order created:", data);
-      } catch (error) {
-        console.error("❌ Generate order failed:", error);
-      }
+    const handleGenerateOrder = () => {
+      fetch('http://localhost:8000/api/generate-order/', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'application/json',
+        },
+      });
     };
 
     return (
