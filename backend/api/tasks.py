@@ -1,5 +1,7 @@
 from .models import Order
 from django.utils import timezone
+from faker import Faker # for generating orders
+import random           # for generating orders
 
 def update_order_etas():
     now = timezone.now()
@@ -13,3 +15,8 @@ def update_order_etas():
             #order.status = "complete"
             #order.completed_at = now  // must double-click to mark as complete (frontend)
             order.save()
+
+fake = Faker()
+
+def generate_customer_name():
+    return fake.name()
