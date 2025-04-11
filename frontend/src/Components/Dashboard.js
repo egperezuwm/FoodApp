@@ -33,7 +33,7 @@ function Dashboard({onLogout}) {
   if (!dashboardData) return <div>Loading...</div>;
 
   // Extracting data
-  const { restaurant, pending_orders, completed_orders, orders, drivers, customers } = dashboardData;
+  const { restaurant, pending_orders, completed_orders, orders, customers } = dashboardData;
 
   const handleLogout = () => {
     // Navigate to login page
@@ -76,7 +76,7 @@ function Dashboard({onLogout}) {
         />
 
         {/* Map */}
-        <MapSection drivers={drivers} customers={customers} />
+        <MapSection orders={orders} customers={customers} />
       </div>
     </div>
   );

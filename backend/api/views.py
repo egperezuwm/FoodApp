@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import UserProfile, Order, Restaurant
 from django.utils import timezone # for generating orders
 import random
-from .tasks import generate_customer_name
+from .tasks import generate_customer_name, generate_random_coordinates_near_restaurant
 
 
 class Signup(APIView):
@@ -84,6 +84,7 @@ class GenerateOrder(APIView):
             price_per_item = random.uniform(10, 20)  # realistic single-item cost so one item doesn't cost $30+
             total_cost = round(item_count * price_per_item, 2)
             eta = random.randint(7, 15)
+            lat, lng = generate_random_coordinates_near_restaurant(restaurant)
 
             order = Order.objects.create(
                 platform=platform,
@@ -92,8 +93,8 @@ class GenerateOrder(APIView):
                 item_count=item_count,
                 total_cost=total_cost,
                 eta=eta,
-                driver_lat=restaurant.location_lat,
-                driver_lng=restaurant.location_lng,
+                driver_lat=lat,
+                driver_lng=lng,
                 status='pending',
                 created_at=timezone.now()
             )

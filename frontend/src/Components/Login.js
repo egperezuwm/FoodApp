@@ -25,19 +25,7 @@ const Login = ({ onLoginSuccess }) => {
       const response = await axios.post('http://127.0.0.1:8000/api/token/', { username, password });
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
-      // Try to get the user profile to get restaurant name
-      try {
-        const userProfileRes = await axios.get('http://127.0.0.1:8000/api/user-profile/', {
-          headers: { Authorization: `Bearer ${response.data.access}` }
-        });
-        if (userProfileRes.data && userProfileRes.data.restaurant_name) {
-          localStorage.setItem('restaurant_name', userProfileRes.data.restaurant_name);
-        }
-      } catch (profileErr) {
-        console.error('Error fetching user profile:', profileErr);
-      }
-      
+      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;      
       //navigate('/dashboard');
       onLoginSuccess({ username })
     } catch (error) {
