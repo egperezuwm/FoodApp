@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import UserProfile, Order, Restaurant
 from django.utils import timezone # for generating orders
 import random
-from .tasks import generate_customer_name, generate_random_coordinates_near_restaurant
+from .tasks import generate_customer_name, generate_random_coordinates_near_restaurant, get_eta, get_route
 
 
 class Signup(APIView):
@@ -38,7 +38,6 @@ class dashboard(APIView):
         
         pending_orders = Order.objects.filter(status="pending").count()
         completed_orders = Order.objects.filter(status="complete").count()
-        #orders = Order.objects.filter(restaurant=restaurant)
         orders = Order.objects.filter(restaurant=restaurant, status=status_filter).order_by('-created_at' if status_filter == 'complete' else 'eta')
         orders_serialized = OrderSerializer(orders, many=True).data
 
@@ -84,8 +83,9 @@ class GenerateOrder(APIView):
             item_count = random.randint(1, 10)
             price_per_item = random.uniform(10, 20)  # realistic single-item cost so one item doesn't cost $30+
             total_cost = round(item_count * price_per_item, 2)
-            eta = random.randint(7, 15)
             lat, lng = generate_random_coordinates_near_restaurant(restaurant)
+            eta = get_eta(lat, lng, restaurant.location_lat, restaurant.location_lng)
+            route_coords = get_route(lat, lng, restaurant.location_lat, restaurant.location_lng)
 
             order = Order.objects.create(
                 platform=platform,
@@ -93,9 +93,10 @@ class GenerateOrder(APIView):
                 restaurant=restaurant,
                 item_count=item_count,
                 total_cost=total_cost,
-                eta=eta,
                 driver_lat=lat,
                 driver_lng=lng,
+                eta=eta,
+                route = route_coords,
                 status='pending',
                 created_at=timezone.now()
             )

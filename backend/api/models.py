@@ -28,10 +28,12 @@ class Order(models.Model):
 
     item_count = models.PositiveIntegerField()
     total_cost = models.DecimalField(max_digits=8, decimal_places=2)    # dummy data (cannot show actual sales)
-    eta = models.PositiveIntegerField()
 
     driver_lat = models.FloatField(null=True, blank=True)
     driver_lng = models.FloatField(null=True, blank=True)
+    route = models.JSONField(default=list, blank=True)                  # pre-determined coords for driver path to restaurant
+    eta = models.PositiveIntegerField()
+
 
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
