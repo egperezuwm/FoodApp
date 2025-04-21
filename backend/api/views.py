@@ -38,7 +38,8 @@ class dashboard(APIView):
         
         pending_orders = Order.objects.filter(status="pending").count()
         completed_orders = Order.objects.filter(status="complete").count()
-        orders = Order.objects.filter(status=status_filter).order_by('-created_at' if status_filter == 'complete' else 'eta')
+        #orders = Order.objects.filter(restaurant=restaurant)
+        orders = Order.objects.filter(restaurant=restaurant, status=status_filter).order_by('-created_at' if status_filter == 'complete' else 'eta')
         orders_serialized = OrderSerializer(orders, many=True).data
 
         return Response({

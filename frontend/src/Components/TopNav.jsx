@@ -34,7 +34,7 @@ function TopNav({ onLogout }) {
           {/*<li>Analytics</li>    {/*press this to see all data within a time period.*/}
           {/*<li>MyProfile</li>    {/* admin only, press this to access admin functions.*/}
           <li><button className="nav-btn" onClick={handleGenerateOrder}>Generate Order</button></li>
-          <li><button className="nav-btn">DoorDash</button></li>
+          {/*<li><button className="nav-btn">DoorDash</button></li>*/}
           <li style={{marginLeft: 'auto'}}><button className="nav-btn" onClick={handleLogout}>Logout</button></li>
         </ul>
       </nav>
