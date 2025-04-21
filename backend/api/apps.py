@@ -14,5 +14,5 @@ class ApiConfig(AppConfig):
         from .tasks import update_order_etas
 
         scheduler = BackgroundScheduler()
-        scheduler.add_job(update_order_etas, 'interval', minutes=1)
+        scheduler.add_job(update_order_etas, 'interval', seconds=5)
         scheduler.start()

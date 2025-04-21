@@ -6,17 +6,31 @@ from math import cos, radians
 
 
 def update_order_etas():
-    now = timezone.now()
-    pending_orders = Order.objects.filter(status="pending")
+    print(">>> Scheduler triggered")
 
-    for order in pending_orders:
-        if order.eta > 0:
-            order.eta -= 1
-            order.save()
-        elif order.eta == 0:
-            #order.status = "complete"
-            #order.completed_at = now  // must double-click to mark as complete (frontend)
-            order.save()
+    orders = Order.objects.filter(status='pending')
+    print(f">>> Found {orders.count()} pending orders")
+
+    for order in orders:
+        route = order.route or []
+        if len(route) <= 1:
+            continue  # already at or near the restaurant
+
+        # Move to next point
+        route.pop(0)
+        next_lng, next_lat = route[0]
+        print(f"Moving Order {order.id} to: {next_lat}, {next_lng} | Remaining route: {len(route)}")
+
+        order.driver_lat = next_lat
+        order.driver_lng = next_lng
+        order.route= route
+
+        order.eta = get_eta(
+            next_lat, next_lng,
+            order.restaurant.location_lat, order.restaurant.location_lng
+        )
+
+        order.save()
 
 fake = Faker()
 
@@ -79,3 +93,11 @@ def get_eta(lat, lng, dest_lat, dest_lng):
         print(f"[OSRM ETA] Error: {e}")
     
     return 10  # fallback ETA
+
+def get_route(start_lat, start_lng, end_lat, end_lng):
+    url = f"http://router.project-osrm.org/route/v1/driving/{start_lng},{start_lat};{end_lng},{end_lat}?overview=full&geometries=geojson"
+    response = requests.get(url, timeout=2)
+    data = response.json()
+    if data.get('code') == 'Ok':
+        return data['routes'][0]['geometry']['coordinates']  # list of [lng, lat]
+    return []
