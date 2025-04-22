@@ -6,7 +6,7 @@ import MapSection from './MapSection';
 import './styles/Dashboard.css';
 
 
-function Dashboard({onLogout}) {
+function Dashboard({ onLogout }) {
   const [dashboardData, setDashboardData] = useState(null);
   const [dismissedOrders, setDismissedOrders] = useState([]);
   const [showCompleted, setShowCompleted] = useState(false);
@@ -39,7 +39,7 @@ function Dashboard({onLogout}) {
     // Navigate to login page
     onLogout();
   };
-  
+
   const handleDismissOrder = (id) => {
     const dismissedOrder = orders.find(order => order.id === id);
     if (dismissedOrder) {
@@ -50,15 +50,15 @@ function Dashboard({onLogout}) {
     }
   };
   const visibleOrders = orders.filter(order => !dismissedOrders.some(d => d.id === order.id));
-  
+
   return (
     <div className="dashboard-container">
       <TopNav onLogout={handleLogout} />
       <div className="dashboard-stats">
         <h2>{restaurant.name} Dashboard</h2>
         <p>Pending Orders: {pending_orders} | Completed Orders: {completed_orders}</p>
-        <button 
-          className="toggle-orders-btn" 
+        <button
+          className="toggle-orders-btn"
           onClick={() => setShowCompleted(!showCompleted)}
         >
           {showCompleted ? "View Current Orders" : "View Completed Orders"}
@@ -69,14 +69,16 @@ function Dashboard({onLogout}) {
 
       <div className="dashboard-main">
         {/* Order List */}
-        <OrderList 
-          orders={visibleOrders} 
-          onDismiss={handleDismissOrder} 
+        <OrderList
+          orders={visibleOrders}
+          onDismiss={handleDismissOrder}
           isCompleted={showCompleted}
         />
 
         {/* Map */}
-        <MapSection orders={orders} customers={customers} />
+        <MapSection orders={orders} customers={customers}
+          restaurantPosition={[restaurant.location_lat, restaurant.location_lng]}
+          restaurant={restaurant}/>
       </div>
     </div>
   );

@@ -1,0 +1,15 @@
+.leaflet-popup-content.wide-popup {
+    width: 250px !important;
+  }
+  
+  .leaflet-popup-content input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .leaflet-popup-content button {
+    display: block;
+    margin-top: 5px;
+    width: 100%;
+  }
+  
