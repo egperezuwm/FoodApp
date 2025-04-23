@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './styles/LoginLayout.css';
 import './styles/LoginForm.css';
@@ -6,18 +6,28 @@ import './styles/Logo.css';
 import './styles/SignUp.css';
 import LoginShowcase from './LoginShowcase';
 
-
-
 const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showSignUp, setShowSignUp] = useState(false);
-  // NEW USER:
   const [signUpUsername, setSignUpUsername] = useState('');
   const [signUpEmail, setSignUpEmail] = useState('');
-  const [restaurantName, setRestaurantName] = useState(''); // patched in 03/30/25
   const [signUpPassword, setSignUpPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(''); 
+
+  const [restaurants, setRestaurants] = useState([]);
+  const [selectedRestaurant, setSelectedRestaurant] = useState('');
+  const [customRestaurant, setCustomRestaurant] = useState('');
+
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/api/restaurant-list/')
+      .then(response => {
+        console.log('Fetched restaurants:', response.data);  // ✅ Inspect this
+        setRestaurants(response.data);
+      })
+      .catch(err => console.error('Failed to load restaurants:', err));
+  }, []);
+  
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,8 +35,7 @@ const Login = ({ onLoginSuccess }) => {
       const response = await axios.post('http://127.0.0.1:8000/api/token/', { username, password });
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;      
-      //navigate('/dashboard');
+      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
       onLoginSuccess({ username })
     } catch (error) {
       console.error('Login failed:', error);
@@ -36,36 +45,34 @@ const Login = ({ onLoginSuccess }) => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    // Connect to backend using boiler-plate code:
     if (signUpPassword !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
   
     try {
-      // NEEDED THIS TO SIGN UP (took 2 hours to find out!!!)
       delete axios.defaults.headers.common['Authorization'];
-
-      const res = await axios.post('http://127.0.0.1:8000/api/signup/', {
+      const restaurantToSubmit = selectedRestaurant === 'other' ? customRestaurant : selectedRestaurant;
+    
+      await axios.post('http://127.0.0.1:8000/api/signup/', {
         username: signUpUsername,
         email: signUpEmail,
         password: signUpPassword,
-        restaurant_name: restaurantName,  // patched in 03/30/25
+        restaurant_name: restaurantToSubmit,
       });
-  
+    
       alert("Account created successfully! You can now log in.");
       setShowSignUp(false);
-  
-      // Clear sign-up form
       setSignUpUsername('');
       setSignUpEmail('');
-      setRestaurantName('');
+      setSelectedRestaurant('');
+      setCustomRestaurant('');
       setSignUpPassword('');
       setConfirmPassword('');
     } catch (err) {
-      console.error('Sign up failed:', err);
-      alert('Sign up failed. Please try again.');
-    }
+        console.error('Sign up failed:', err);
+        alert('Sign up failed. Please try again.');
+      }
   };
 
   return (
@@ -76,11 +83,9 @@ const Login = ({ onLoginSuccess }) => {
             <div className="LogoArea">
               <div className='companyLogo'></div>
               <h2>SyncServe</h2> 
-              {/* Up for change */}
             </div>
             <form onSubmit={handleLogin} id="LoginForm">
               <h2>Welcome Back!</h2>
-              {/* <p>Hey! It's nice to have you back.</p> (removing for now)*/}
               <div>
                 <input 
                   className="usernameInput"
@@ -140,13 +145,26 @@ const Login = ({ onLoginSuccess }) => {
                 onChange={(e) => setSignUpEmail(e.target.value)}
                 required
               />
-              <input          // patched in 03/30/25
-                type="text"
-                placeholder="Restaurant Name"
-                value={restaurantName}
-                onChange={(e) => setRestaurantName(e.target.value)}
+              <select
+                value={selectedRestaurant}
+                onChange={(e) => setSelectedRestaurant(e.target.value)}
                 required
-              />
+              >
+                <option value="">Select a Restaurant</option>
+                {restaurants.map((r) => (
+                  <option key={r.id} value={r.name}>{r.name}</option>
+                ))}
+                <option value="other">-- Other --</option>
+              </select>
+              {selectedRestaurant === 'other' && (
+                <input
+                  type="text"
+                  placeholder="Enter Restaurant Name"
+                  value={customRestaurant}
+                  onChange={(e) => setCustomRestaurant(e.target.value)}
+                  required
+                />
+              )}
               <input
                 type="password"
                 placeholder="Password"
