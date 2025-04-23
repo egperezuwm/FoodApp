@@ -6,7 +6,7 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=100)
     address = models.TextField(blank=True)
     location_lat = models.FloatField(default=42.9744)
-    location_lng = models.FloatField(default=87.938)
+    location_lng = models.FloatField(default=-87.938)
 
     def __str__(self):
         return self.name

@@ -106,3 +106,20 @@ class GenerateOrder(APIView):
         except Exception as e:
             print("❌ Order creation failed:", str(e))  # This will show the REAL reason
             return Response({'error': str(e)}, status=500)
+        
+class UpdateRestaurantLocation(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        profile = UserProfile.objects.get(user=request.user)
+        restaurant = profile.restaurant
+
+        location_lat = request.data.get('location_lat')
+        location_lng = request.data.get('location_lng')
+
+        if location_lat is not None and location_lng is not None:
+            restaurant.location_lat = location_lat
+            restaurant.location_lng = location_lng
+            restaurant.save()
+            return Response({"message": "Location updated"}, status=status.HTTP_200_OK)
+        return Response({"error": "Invalid coordinates"}, status=status.HTTP_400_BAD_REQUEST)
