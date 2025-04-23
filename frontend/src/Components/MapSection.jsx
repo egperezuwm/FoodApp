@@ -4,9 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import './styles/MapSection.css';
 import axios from 'axios';
 import restaurantIconUrl from '../assets/home.png';
-import doordashIconUrl from '../assets/doordash.png';
-import grubhubIconUrl from '../assets/grubhub.png';
-import ubereatsIconUrl from '../assets/ubereats.png';
+import carIconUrl from '../assets/car_icon.png';
 
 function RestaurantMarker({ position, icon, name }) {
   const [showInput, setShowInput] = useState(false);
@@ -94,21 +92,21 @@ function MapSection({ orders, customers, restaurantPosition, restaurant }) {
   });
 
   const doordashIcon = new L.Icon({
-    iconUrl: doordashIconUrl,
+    iconUrl: carIconUrl,
     iconSize: [64, 64],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32]
   });
 
   const grubhubIcon = new L.Icon({
-    iconUrl: grubhubIconUrl,
+    iconUrl: carIconUrl,
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32]
   });
 
   const ubereatsIcon = new L.Icon({
-    iconUrl: ubereatsIconUrl,
+    iconUrl: carIconUrl,
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32]

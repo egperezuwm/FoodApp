@@ -16,10 +16,16 @@ function OrderCard({ order, onDismiss }) {
       onDismiss(id);
     }
   };
+
+  const platformStyles = {
+    DoorDash: { backgroundColor: '#ffcccc' },  // Stronger soft red
+    UberEats: { backgroundColor: '#ccffcc' },  // Stronger soft green
+    GrubHub:  { backgroundColor: '#ffe0b3' }   // Stronger soft orange
+  };
   
 
   return (
-    <div className="order-card" onDoubleClick={handleDoubleClick}>
+    <div className="order-card" style={platformStyles[platform]} onDoubleClick={handleDoubleClick}>
       <h3>{platform} for {customer_name}</h3>
       <p>{item_count} items - ${Number(total_cost || 0).toFixed(2)}</p>
       <p style={{ fontWeight: 'bold', color: eta === 'Arriving' ? 'red' : 'black' }}>
