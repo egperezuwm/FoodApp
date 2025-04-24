@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import TopNav from './TopNav';
 import OrderList from './OrderList';
@@ -12,40 +12,49 @@ function Dashboard({ onLogout }) {
   const [showCompleted, setShowCompleted] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-  const [prevOrderIds, setPrevOrderIds] = useState([]);
   const [newOrderAlert, setNewOrderAlert] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
+  const seenOrderIdsRef = useRef(new Set());
 
   useEffect(() => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("access_token")}`;
+  }, []); // set auth header once on mount
 
-    const fetchDashboardData = async () => {
-      try {
-        const status = showCompleted ? 'complete' : 'pending';
-        const response = await axios.get(`http://127.0.0.1:8000/api/dashboard/?status=${status}`);
+  const fetchDashboardData = async () => {
+    try {
+      const status = showCompleted ? 'complete' : 'pending';
+      const response = await axios.get(`http://127.0.0.1:8000/api/dashboard/?status=${status}`);
 
-        const currentOrderIds = response.data.orders.map(order => order.id);
-        const newOrders = currentOrderIds.filter(id => !prevOrderIds.includes(id));
-
-        if (newOrders.length > 0 && !showCompleted) {
+      const currentOrderIds = response.data.orders.map(order => order.id);
+      // Trigger alert if there are new unseen orders (fixes infinite "New Order Received" alert bug)
+      if (!showCompleted) {
+        const trulyNewOrders = currentOrderIds.filter(id => !seenOrderIdsRef.current.has(id));
+        if (trulyNewOrders.length > 0) {
           setNewOrderAlert(true);
-          setTimeout(() => setNewOrderAlert(false), 3000); // Hide after 3 seconds
+          setTimeout(() => setNewOrderAlert(false), 3000);
+          trulyNewOrders.forEach(id => seenOrderIdsRef.current.add(id));
         }
-        
-        // Reset dismissed orders when switching views or when the order list changes
-        setDismissedOrders([]);
-        
-        setPrevOrderIds(currentOrderIds);
-        setDashboardData(response.data);
-        setLastUpdated(new Date().toLocaleTimeString());
-      } catch (error) {
-        console.error("Error fetching dashboard data:", error);
       }
-    };
 
-    fetchDashboardData();
-    const interval = setInterval(fetchDashboardData, 5000); // repeat every 5s
-    return () => clearInterval(interval); // cleanup on unmount
+      // Reset dismissed orders when switching views or when the order list changes
+      setDismissedOrders([]);
+      // Update states
+      setDashboardData(response.data);
+      setLastUpdated(new Date().toLocaleTimeString());
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    }
+  };
+  // Set up polling on mount
+  useEffect(() => {
+    fetchDashboardData(); // initial fetch
+    const interval = setInterval(fetchDashboardData, 5000);
+    return () => clearInterval(interval);
+  }, []); // ← only run once on mount
+
+  // Re-fetch when toggling view
+  useEffect(() => {
+    fetchDashboardData(); // force update when toggling view
   }, [showCompleted]);
 
   if (!dashboardData) return <div>Loading...</div>;
@@ -99,7 +108,7 @@ function Dashboard({ onLogout }) {
         )}
       </div>
 
-      
+
       {newOrderAlert && (<div className="floating-neworder-msg">🛎️ New Order Received!</div>)}
       {showSuccessMessage && (<div className="floating-success-msg">{successMessage}</div>)}
 
@@ -114,7 +123,7 @@ function Dashboard({ onLogout }) {
         {/* Map */}
         <MapSection orders={orders} customers={customers}
           restaurantPosition={[restaurant.location_lat, restaurant.location_lng]}
-          restaurant={restaurant}/>
+          restaurant={restaurant} />
       </div>
     </div>
   );
