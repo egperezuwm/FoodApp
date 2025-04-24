@@ -11,6 +11,9 @@ function Dashboard({ onLogout }) {
   const [dismissedOrders, setDismissedOrders] = useState([]);
   const [showCompleted, setShowCompleted] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [prevOrderIds, setPrevOrderIds] = useState([]);
+  const [newOrderAlert, setNewOrderAlert] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("access_token")}`;
@@ -19,7 +22,18 @@ function Dashboard({ onLogout }) {
       try {
         const status = showCompleted ? 'complete' : 'pending';
         const response = await axios.get(`http://127.0.0.1:8000/api/dashboard/?status=${status}`);
+
+        const currentOrderIds = response.data.orders.map(order => order.id);
+        const newOrders = currentOrderIds.filter(id => !prevOrderIds.includes(id));
+
+        if (newOrders.length > 0 && !showCompleted) {
+          setNewOrderAlert(true);
+          setTimeout(() => setNewOrderAlert(false), 3000); // Hide after 3 seconds
+        }
+        
+        setPrevOrderIds(currentOrderIds);
         setDashboardData(response.data);
+        setLastUpdated(new Date().toLocaleTimeString());
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       }
@@ -28,7 +42,7 @@ function Dashboard({ onLogout }) {
     fetchDashboardData();
     const interval = setInterval(fetchDashboardData, 5000); // repeat every 5s
     return () => clearInterval(interval); // cleanup on unmount
-  }, [showCompleted]);
+  }, [showCompleted, prevOrderIds]);
 
   if (!dashboardData) return <div>Loading...</div>;
 
@@ -54,17 +68,26 @@ function Dashboard({ onLogout }) {
   return (
     <div className="dashboard-container">
       <TopNav onLogout={handleLogout} />
-      <div className="dashboard-stats">
+      <div className="dashboard-stats-bar">
         <h2>{restaurant.name} Dashboard</h2>
-        <p>Pending Orders: {pending_orders} | Completed Orders: {completed_orders}</p>
+        <div className="stats-group">
+          <p>Pending Orders: {pending_orders} Completed Orders: {completed_orders}</p>
+        </div>
         <button
           className="toggle-orders-btn"
           onClick={() => setShowCompleted(!showCompleted)}
         >
           {showCompleted ? "View Current Orders" : "View Completed Orders"}
         </button>
+        {lastUpdated && (
+          <div className="dashboard-refresh-info">
+            Last updated: {lastUpdated}
+          </div>
+        )}
       </div>
 
+      
+      {newOrderAlert && (<div className="floating-neworder-msg">🛎️ New Order Received!</div>)}
       {showSuccessMessage && (<div className="floating-success-msg">Order Completed ✔️</div>)}
 
       <div className="dashboard-main">

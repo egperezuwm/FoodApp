@@ -1,11 +1,11 @@
-/* Layout Container */
+/* ========== Layout Container ========== */
 .dashboard-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
-/* Top Navigation */
+/* ========== Top Navigation ========== */
 .top-nav {
   background-color: #6a0dad;
   color: white;
@@ -41,11 +41,38 @@
   background-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Dashboard Content */
-.dashboard-stats {
+/* ========== Dashboard Stats Bar ========== */
+.dashboard-stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin: 1rem;
+  font-family: inherit;
+  font-weight: bold;
 }
 
+.dashboard-stats-bar h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.stats-group p {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.dashboard-refresh-info {
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Toggle Orders Button */
 .toggle-orders-btn {
   background-color: #6a0dad;
   color: white;
@@ -54,14 +81,15 @@
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 10px;
   transition: background-color 0.2s ease;
+  font-family: inherit;
 }
 
 .toggle-orders-btn:hover {
   background-color: #8c1dff;
 }
 
+/* ========== Dashboard Main Content ========== */
 .dashboard-main {
   display: flex;
   flex-direction: row;
@@ -71,7 +99,7 @@
   width: 100%;
 }
 
-/* Order List Panel */
+/* ========== Order List Panel ========== */
 .order-list {
   flex: 1;
   max-width: 350px;
@@ -81,13 +109,21 @@
   overflow-y: auto;
 }
 
-/* Individual Order Card */
+/* ========== Order Card ========== */
 .order-card {
   background: white;
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 10px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.7s ease-in-out;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.order-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .order-card h3 {
@@ -100,36 +136,49 @@
   font-size: 0.9em;
 }
 
-/* Map Section */
+/* ========== Map Section ========== */
 .map-section {
   flex: 2;
   height: 100%;
   width: 100%;
 }
 
-/* Add hover pop effect */
-.order-card:hover {
-  transform: scale(1.03);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.floating-success-msg {
+/* ========== Floating Notifications ========== */
+.floating-success-msg,
+.floating-neworder-msg {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: #d4edda;
-  color: #155724;
-  padding: 10px 18px;
-  border-radius: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 20px 36px;
+  border-radius: 12px;
   font-weight: bold;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  animation: fadeOut 2s ease-in-out forwards;
+  font-size: 1.5rem;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
   z-index: 9999;
 }
 
+.floating-success-msg {
+  top: 30%;
+  background-color: #d4edda;
+  color: #155724;
+  animation: fadeOut 2s ease-in-out forwards;
+}
+
+.floating-neworder-msg {
+  top: 40%;
+  background-color: #fff3cd;
+  color: #856404;
+  animation: fadeOut 3s ease-in-out forwards;
+}
+
+/* ========== Animations ========== */
 @keyframes fadeOut {
   0%   { opacity: 1; transform: translateY(0); }
   90%  { opacity: 1; }
   100% { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
