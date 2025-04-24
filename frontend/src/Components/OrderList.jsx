@@ -6,7 +6,7 @@ function OrderList({ orders, onDismiss, isCompleted }) {
     <div className="order-list">
       <h3>{isCompleted ? "Completed Orders" : "Current Orders"}</h3>
       {orders.length > 0 ? (
-        orders.map(order => <OrderCard key={order.id} order={order} onDismiss={isCompleted ? null : onDismiss}/>)
+        orders.map(order => <OrderCard key={order.id} order={order} onDismiss={onDismiss} isCompleted={isCompleted} />)
       ) : (
         <p>{isCompleted ? "No completed orders" : "No active orders"}</p>
       )}
