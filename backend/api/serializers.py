@@ -34,4 +34,4 @@ class RestaurantSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['id', 'platform', 'customer_name', 'item_count', 'total_cost', 'eta', 'status', 'driver_lat', 'driver_lng', 'created_at']
+        fields = ['id', 'platform', 'customer_name', 'item_count', 'total_cost', 'eta', 'status', 'driver_lat', 'driver_lng', 'created_at', 'completed_at']

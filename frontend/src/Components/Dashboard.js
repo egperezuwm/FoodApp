@@ -11,6 +11,7 @@ function Dashboard({ onLogout }) {
   const [dismissedOrders, setDismissedOrders] = useState([]);
   const [showCompleted, setShowCompleted] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const [prevOrderIds, setPrevOrderIds] = useState([]);
   const [newOrderAlert, setNewOrderAlert] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -31,6 +32,9 @@ function Dashboard({ onLogout }) {
           setTimeout(() => setNewOrderAlert(false), 3000); // Hide after 3 seconds
         }
         
+        // Reset dismissed orders when switching views or when the order list changes
+        setDismissedOrders([]);
+        
         setPrevOrderIds(currentOrderIds);
         setDashboardData(response.data);
         setLastUpdated(new Date().toLocaleTimeString());
@@ -42,7 +46,7 @@ function Dashboard({ onLogout }) {
     fetchDashboardData();
     const interval = setInterval(fetchDashboardData, 5000); // repeat every 5s
     return () => clearInterval(interval); // cleanup on unmount
-  }, [showCompleted, prevOrderIds]);
+  }, [showCompleted]);
 
   if (!dashboardData) return <div>Loading...</div>;
 
@@ -57,10 +61,19 @@ function Dashboard({ onLogout }) {
   const handleDismissOrder = (id) => {
     const dismissedOrder = orders.find(order => order.id === id);
     if (dismissedOrder) {
+      // Temporarily dismiss the order but it will reappear on next refresh
       setDismissedOrders(prev => [...prev, dismissedOrder]);
 
-      setShowSuccessMessage(true);
-      setTimeout(() => setShowSuccessMessage(false), 2000);
+      // Show different messages based on the current view
+      if (showCompleted) {
+        setSuccessMessage("Order Recalled ↩️");
+        setShowSuccessMessage(true);
+        setTimeout(() => setShowSuccessMessage(false), 2000);
+      } else {
+        setSuccessMessage("Order Completed ✔️");
+        setShowSuccessMessage(true);
+        setTimeout(() => setShowSuccessMessage(false), 2000);
+      }
     }
   };
   const visibleOrders = orders.filter(order => !dismissedOrders.some(d => d.id === order.id));
@@ -88,7 +101,7 @@ function Dashboard({ onLogout }) {
 
       
       {newOrderAlert && (<div className="floating-neworder-msg">🛎️ New Order Received!</div>)}
-      {showSuccessMessage && (<div className="floating-success-msg">Order Completed ✔️</div>)}
+      {showSuccessMessage && (<div className="floating-success-msg">{successMessage}</div>)}
 
       <div className="dashboard-main">
         {/* Order List */}
