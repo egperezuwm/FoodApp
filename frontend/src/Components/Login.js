@@ -32,11 +32,25 @@ const Login = ({ onLoginSuccess }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      console.log("Attempting login with:", username);
+      
+      // Clear any previous tokens before login attempt
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      delete axios.defaults.headers.common['Authorization'];
+      
       const response = await axios.post('http://127.0.0.1:8000/api/token/', { username, password });
+      
+      console.log("Login successful, storing tokens...");
       localStorage.setItem('access_token', response.data.access);
       localStorage.setItem('refresh_token', response.data.refresh);
+      localStorage.setItem('username', username);
+      
+      // Set the authorization header for future requests
       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
-      onLoginSuccess({ username })
+      
+      console.log("Calling onLoginSuccess");
+      onLoginSuccess({ username });
     } catch (error) {
       console.error('Login failed:', error);
       alert('Login failed! Please check your credentials.');

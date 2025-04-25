@@ -148,3 +148,60 @@ def RestaurantList(request):
     restaurants = Restaurant.objects.all().order_by('name')
     serializer = RestaurantSerializer(restaurants, many=True)
     return Response(serializer.data)
+
+class OrderAnalytics(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        try:
+            restaurant = request.user.userprofile.restaurant
+            
+            # Total orders
+            total_orders = Order.objects.filter(restaurant=restaurant).count()
+            
+            # Completed orders
+            completed_orders = Order.objects.filter(restaurant=restaurant, status='complete').count()
+            
+            # Average bill amount
+            from django.db.models import Avg, Count, Sum
+            
+            avg_bill = Order.objects.filter(restaurant=restaurant).aggregate(avg=Avg('total_cost'))
+            
+            # Platform distribution
+            platform_distribution = Order.objects.filter(restaurant=restaurant).values('platform').annotate(
+                count=Count('id'),
+                percentage=Count('id') * 100.0 / total_orders if total_orders > 0 else 0
+            )
+            
+            # Orders by hour (for time of day analysis)
+            from django.db.models.functions import ExtractHour
+            
+            orders_by_hour = Order.objects.filter(restaurant=restaurant).annotate(
+                hour=ExtractHour('created_at')
+            ).values('hour').annotate(count=Count('id')).order_by('hour')
+            
+            # Average items per order
+            avg_items = Order.objects.filter(restaurant=restaurant).aggregate(avg=Avg('item_count'))
+            
+            # Revenue data (total and by platform)
+            total_revenue = Order.objects.filter(restaurant=restaurant).aggregate(sum=Sum('total_cost'))
+            
+            revenue_by_platform = Order.objects.filter(restaurant=restaurant).values('platform').annotate(
+                revenue=Sum('total_cost')
+            )
+            
+            return Response({
+                'total_orders': total_orders,
+                'completed_orders': completed_orders,
+                'completion_rate': (completed_orders / total_orders * 100) if total_orders > 0 else 0,
+                'avg_bill_amount': avg_bill['avg'],
+                'platform_distribution': list(platform_distribution),
+                'orders_by_hour': list(orders_by_hour),
+                'avg_items_per_order': avg_items['avg'],
+                'total_revenue': total_revenue['sum'],
+                'revenue_by_platform': list(revenue_by_platform)
+            })
+            
+        except Exception as e:
+            print("ANALYTICS ERROR:", e)
+            return Response({"error": str(e)}, status=400)

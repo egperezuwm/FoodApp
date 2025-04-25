@@ -6,7 +6,7 @@ import MapSection from './MapSection';
 import './styles/Dashboard.css';
 
 
-function Dashboard({ onLogout }) {
+function Dashboard({ onLogout, showAnalytics }) {
   const [dashboardData, setDashboardData] = useState(null);
   const [dismissedOrders, setDismissedOrders] = useState([]);
   const [showCompleted, setShowCompleted] = useState(false);
@@ -17,12 +17,22 @@ function Dashboard({ onLogout }) {
   const [lastUpdated, setLastUpdated] = useState(null);
 
   useEffect(() => {
+    console.log("Dashboard mounted, fetching data...");
+    // Ensure authorization header is set
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("access_token")}`;
 
     const fetchDashboardData = async () => {
       try {
+        console.log("Fetching dashboard data...");
         const status = showCompleted ? 'complete' : 'pending';
         const response = await axios.get(`http://127.0.0.1:8000/api/dashboard/?status=${status}`);
+
+        console.log("Dashboard data received:", response.data ? "Data OK" : "No data");
+        
+        if (!response.data) {
+          console.error("Empty response from dashboard API");
+          return;
+        }
 
         const currentOrderIds = response.data.orders.map(order => order.id);
         const newOrders = currentOrderIds.filter(id => !prevOrderIds.includes(id));
@@ -40,6 +50,17 @@ function Dashboard({ onLogout }) {
         setLastUpdated(new Date().toLocaleTimeString());
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
+        
+        // Handle 401 Unauthorized error
+        if (error.response && error.response.status === 401) {
+          console.log("Authentication failed - redirecting to login");
+          // Clear any stored tokens
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+          localStorage.removeItem('username');
+          // Force page reload to trigger login screen
+          window.location.href = '/';
+        }
       }
     };
 
@@ -48,7 +69,27 @@ function Dashboard({ onLogout }) {
     return () => clearInterval(interval); // cleanup on unmount
   }, [showCompleted]);
 
-  if (!dashboardData) return <div>Loading...</div>;
+  if (!dashboardData) {
+    console.log('Dashboard data is not loaded yet');
+    return (
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column',
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        backgroundColor: '#f5f5f5'
+      }}>
+        <TopNav onLogout={handleLogout} showAnalyticsLink={true} onAnalyticsClick={showAnalytics} />
+        <div style={{ marginTop: '100px' }}>
+          <h2>Loading dashboard data...</h2>
+          <p style={{ marginTop: '10px', color: '#666' }}>
+            Connecting to the server...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Extracting data
   const { restaurant, pending_orders, completed_orders, orders, customers } = dashboardData;
@@ -80,7 +121,7 @@ function Dashboard({ onLogout }) {
 
   return (
     <div className="dashboard-container">
-      <TopNav onLogout={handleLogout} />
+      <TopNav onLogout={handleLogout} showAnalyticsLink={true} onAnalyticsClick={showAnalytics} />
       <div className="dashboard-stats-bar">
         <h2>{restaurant.name} Dashboard</h2>
         <div className="stats-group">

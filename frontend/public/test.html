@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script>
+        // Simple mock React app to test navigation
+        const root = document.getElementById('root');
+        let showAnalytics = false;
+        
+        function renderApp() {
+            if (showAnalytics) {
+                root.innerHTML = `
+                    <div style="padding: 20px;">
+                        <h1>Analytics Page</h1>
+                        <div>
+                            <h2>Order Statistics</h2>
+                            <p>Total Orders: 124</p>
+                            <p>Completed Orders: 98</p>
+                            <p>Average Bill: $105.42</p>
+                        </div>
+                        <button onclick="toggleView()">Back to Dashboard</button>
+                    </div>
+                `;
+            } else {
+                root.innerHTML = `
+                    <div style="padding: 20px;">
+                        <h1>Dashboard</h1>
+                        <p>This is the dashboard view</p>
+                        <button onclick="toggleView()">Go to Analytics</button>
+                    </div>
+                `;
+            }
+        }
+        
+        function toggleView() {
+            showAnalytics = !showAnalytics;
+            renderApp();
+        }
+        
+        // Initial render
+        renderApp();
+    </script>
+</body>
+</html>
