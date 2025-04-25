@@ -15,6 +15,7 @@ function Dashboard({ onLogout }) {
   const [newOrderAlert, setNewOrderAlert] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
   const seenOrderIdsRef = useRef(new Set());
+  const [selectedOrderId, setSelectedOrderId] = useState(null);   // for selected orders
 
   useEffect(() => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("access_token")}`;
@@ -22,29 +23,36 @@ function Dashboard({ onLogout }) {
 
   const fetchDashboardData = async () => {
     try {
-      const status = showCompleted ? 'complete' : 'pending';
-      const response = await axios.get(`http://127.0.0.1:8000/api/dashboard/?status=${status}`);
-
-      const currentOrderIds = response.data.orders.map(order => order.id);
-      // Trigger alert if there are new unseen orders (fixes infinite "New Order Received" alert bug)
+      const [pendingRes, completedRes] = await Promise.all([
+        axios.get(`http://127.0.0.1:8000/api/dashboard/?status=pending`),
+        axios.get(`http://127.0.0.1:8000/api/dashboard/?status=complete`)
+      ]);
+  
+      const allOrders = [...pendingRes.data.orders, ...completedRes.data.orders];
+  
       if (!showCompleted) {
-        const trulyNewOrders = currentOrderIds.filter(id => !seenOrderIdsRef.current.has(id));
+        const currentPendingIds = pendingRes.data.orders.map(order => order.id);
+        const trulyNewOrders = currentPendingIds.filter(id => !seenOrderIdsRef.current.has(id));
         if (trulyNewOrders.length > 0) {
           setNewOrderAlert(true);
           setTimeout(() => setNewOrderAlert(false), 3000);
           trulyNewOrders.forEach(id => seenOrderIdsRef.current.add(id));
         }
       }
-
-      // Reset dismissed orders when switching views or when the order list changes
-      setDismissedOrders([]);
-      // Update states
-      setDashboardData(response.data);
+  
+      setDashboardData({
+        ...pendingRes.data,
+        orders: allOrders,
+        pending_orders: pendingRes.data.orders.length,
+        completed_orders: completedRes.data.orders.length,
+      });
+  
       setLastUpdated(new Date().toLocaleTimeString());
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
     }
   };
+  
   // Set up polling on mount
   useEffect(() => {
     fetchDashboardData(); // initial fetch
@@ -54,6 +62,8 @@ function Dashboard({ onLogout }) {
 
   // Re-fetch when toggling view
   useEffect(() => {
+    // Reset dismissed orders when switching views or when the order list changes
+    setDismissedOrders([]); // should prevent completed orders from being dismissed.
     fetchDashboardData(); // force update when toggling view
   }, [showCompleted]);
 
@@ -68,24 +78,22 @@ function Dashboard({ onLogout }) {
   };
 
   const handleDismissOrder = (id) => {
+    if (showCompleted) return; // ✅ Skip dismissing if we're in "Completed Orders" view
+  
     const dismissedOrder = orders.find(order => order.id === id);
     if (dismissedOrder) {
       // Temporarily dismiss the order but it will reappear on next refresh
       setDismissedOrders(prev => [...prev, dismissedOrder]);
-
-      // Show different messages based on the current view
-      if (showCompleted) {
-        setSuccessMessage("Order Recalled ↩️");
-        setShowSuccessMessage(true);
-        setTimeout(() => setShowSuccessMessage(false), 2000);
-      } else {
-        setSuccessMessage("Order Completed ✔️");
-        setShowSuccessMessage(true);
-        setTimeout(() => setShowSuccessMessage(false), 2000);
-      }
+  
+      // Show message
+      setSuccessMessage("Order Completed ✔️");
+      setShowSuccessMessage(true);
+      setTimeout(() => setShowSuccessMessage(false), 2000);
     }
   };
-  const visibleOrders = orders.filter(order => !dismissedOrders.some(d => d.id === order.id));
+  const visibleOrders = orders
+  .filter(order => (showCompleted ? order.status === 'complete' : order.status === 'pending'))
+  .filter(order => !dismissedOrders.some(d => d.id === order.id));
 
   return (
     <div className="dashboard-container">
@@ -118,12 +126,15 @@ function Dashboard({ onLogout }) {
           orders={visibleOrders}
           onDismiss={handleDismissOrder}
           isCompleted={showCompleted}
-        />
+          onSelect={id => setSelectedOrderId(id)} // "single-click" on Order-Card
+          />
 
         {/* Map */}
-        <MapSection orders={orders} customers={customers}
+        <MapSection orders={orders}
+          customers={customers}
           restaurantPosition={[restaurant.location_lat, restaurant.location_lng]}
-          restaurant={restaurant} />
+          restaurant={restaurant}
+          selectedOrderId={selectedOrderId} />
       </div>
     </div>
   );
