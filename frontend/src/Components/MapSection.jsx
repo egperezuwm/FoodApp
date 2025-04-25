@@ -79,10 +79,9 @@ function RestaurantMarker({ position, icon, name }) {
   );
 }
 
-function MapSection({ orders, customers, restaurantPosition, restaurant }) {
+function MapSection({ orders, customers, restaurantPosition, restaurant, selectedOrderId }) {
   console.log("Orders in MapSection:", orders);
-  // center the map around the restaurant’s coordinates
-  //const restaurantPosition = [43.075083, -87.888147]; DELETE DELETE DELETE
+  const [activePopup, setActivePopup] = useState(null); // stores selected order popup
 
   const restaurantIcon = new L.Icon({
     iconUrl: restaurantIconUrl,
@@ -115,9 +114,9 @@ function MapSection({ orders, customers, restaurantPosition, restaurant }) {
   return (
     <div className="map-section">
       <MapContainer center={restaurantPosition} zoom={14} style={{ height: '100%', width: '100%' }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+
+        <PopupTrigger selectedOrderId={selectedOrderId} orders={orders} /> 
         {/* Restaurant Marker with address update option */}
         <RestaurantMarker position={restaurantPosition} icon={restaurantIcon} name={restaurant.name} />
 
@@ -162,6 +161,27 @@ function MapSection({ orders, customers, restaurantPosition, restaurant }) {
       </MapContainer>
     </div>
   );
+}
+function PopupTrigger({ selectedOrderId, orders }) {
+  const map = useMap();
+
+  useEffect(() => {
+    const selected = orders.find(o => o.id === selectedOrderId);
+    if (selected) {
+      const latlng = [selected.driver_lat, selected.driver_lng];
+      const popupContent = `
+        <strong>${selected.platform}</strong><br />
+        ${selected.customer_name}<br />
+        ETA: ${selected.eta} min
+      `;
+      const leafletPopup = L.popup({ offset: [0, -15] })
+        .setLatLng(latlng)
+        .setContent(popupContent)
+        .openOn(map);
+    }
+  }, [selectedOrderId, orders, map]);
+
+  return null; // this component does not render anything
 }
 
 export default MapSection;
