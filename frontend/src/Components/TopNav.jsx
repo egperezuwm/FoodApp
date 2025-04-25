@@ -1,6 +1,6 @@
 import React from 'react';
 
-function TopNav({ onLogout }) {
+function TopNav({ onLogout, showAnalyticsLink = true, onAnalyticsClick, onDashboardClick }) {
     const handleLogout = () => {
       // Clear localStorage
       localStorage.removeItem('access_token');
@@ -29,12 +29,28 @@ function TopNav({ onLogout }) {
     return (
       <nav className="top-nav">
         <ul>
-          {/*<li>Orders</li>       {/*press this to show most recent completed orders.*/}
-          {/*<li>All Orders</li>   {/*press this to do a search of order history by day or service.*/}
-          {/*<li>Analytics</li>    {/*press this to see all data within a time period.*/}
-          {/*<li>MyProfile</li>    {/* admin only, press this to access admin functions.*/}
+          {showAnalyticsLink ? (
+            <li>
+              <button 
+                className="nav-btn"
+                onClick={onAnalyticsClick}
+                style={{ marginRight: '10px' }}
+              >
+                Analytics
+              </button>
+            </li>
+          ) : (
+            <li>
+              <button 
+                className="nav-btn"
+                onClick={onDashboardClick}
+                style={{ marginRight: '10px' }}
+              >
+                Dashboard
+              </button>
+            </li>
+          )}
           <li><button className="nav-btn" onClick={handleGenerateOrder}>Generate Order</button></li>
-          {/*<li><button className="nav-btn">DoorDash</button></li>*/}
           <li style={{marginLeft: 'auto'}}><button className="nav-btn" onClick={handleLogout}>Logout</button></li>
         </ul>
       </nav>

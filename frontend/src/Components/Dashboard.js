@@ -6,7 +6,7 @@ import MapSection from './MapSection';
 import './styles/Dashboard.css';
 
 
-function Dashboard({ onLogout }) {
+function Dashboard({ onLogout, showAnalytics }) {
   const [dashboardData, setDashboardData] = useState(null);
   const [dismissedOrders, setDismissedOrders] = useState([]);
   const [showCompleted, setShowCompleted] = useState(false);
@@ -18,6 +18,8 @@ function Dashboard({ onLogout }) {
   const [selectedOrderId, setSelectedOrderId] = useState(null);   // for selected orders
 
   useEffect(() => {
+    console.log("Dashboard mounted, fetching data...");
+    // Ensure authorization header is set
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("access_token")}`;
   }, []); // set auth header once on mount
 
@@ -67,7 +69,27 @@ function Dashboard({ onLogout }) {
     fetchDashboardData(); // force update when toggling view
   }, [showCompleted]);
 
-  if (!dashboardData) return <div>Loading...</div>;
+  if (!dashboardData) {
+    console.log('Dashboard data is not loaded yet');
+    return (
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column',
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        backgroundColor: '#f5f5f5'
+      }}>
+        <TopNav onLogout={handleLogout} showAnalyticsLink={true} onAnalyticsClick={showAnalytics} />
+        <div style={{ marginTop: '100px' }}>
+          <h2>Loading dashboard data...</h2>
+          <p style={{ marginTop: '10px', color: '#666' }}>
+            Connecting to the server...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Extracting data
   const { restaurant, pending_orders, completed_orders, orders, customers } = dashboardData;
@@ -97,7 +119,7 @@ function Dashboard({ onLogout }) {
 
   return (
     <div className="dashboard-container">
-      <TopNav onLogout={handleLogout} />
+      <TopNav onLogout={handleLogout} showAnalyticsLink={true} onAnalyticsClick={showAnalytics} />
       <div className="dashboard-stats-bar">
         <h2>{restaurant.name} Dashboard</h2>
         <div className="stats-group">
