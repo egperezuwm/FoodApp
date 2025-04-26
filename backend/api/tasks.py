@@ -1,4 +1,4 @@
-from .models import Order
+from .models import UserProfile, Order
 from django.utils import timezone
 from faker import Faker # for generating orders
 import requests
@@ -7,7 +7,6 @@ from math import cos, radians
 
 def update_order_etas():
     print(">>> Scheduler triggered")
-
     orders = Order.objects.filter(status='pending')
     print(f">>> Found {orders.count()} pending orders")
 
@@ -25,10 +24,15 @@ def update_order_etas():
         order.driver_lng = next_lng
         order.route= route
 
-        order.eta = get_eta(
-            next_lat, next_lng,
-            order.restaurant.location_lat, order.restaurant.location_lng
-        )
+        if len(route)%20 == 0: # THROTTLE get_eta to avoid being banned from OSRM servers!
+            print(f"updating eta for {order.id}")
+            try:
+                order.eta = get_eta(
+                    next_lat, next_lng,
+                    order.restaurant.location_lat, order.restaurant.location_lng
+                )
+            except Exception as e:
+                print(f"[OSRM ETA ERROR] Order {order.id}: {e}")
 
         order.save()
 
@@ -91,7 +95,6 @@ def get_eta(lat, lng, dest_lat, dest_lng):
             return int(round(duration_sec / 60))  # convert to minutes
     except Exception as e:
         print(f"[OSRM ETA] Error: {e}")
-    
     return 10  # fallback ETA
 
 def get_route(start_lat, start_lng, end_lat, end_lng):
